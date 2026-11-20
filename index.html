@@ -75,29 +75,53 @@ button.b:focus-visible{outline:3px solid var(--win);outline-offset:2px}
     <span class="status" id="status"></span>
   </div>
 
-  <p class="note">Each card number deals a different shuffle from about 70 phrases, so the person next to you can tap New card and play their own. Rows, columns and diagonals count.</p>
+  <p class="note">Each card number deals a different shuffle from 200 phrases, so the person next to you can tap New card and play their own. Rows, columns and diagonals count.</p>
 </main>
 
 <script>
 {
 const BANK = [
-  "Agile","We're in Sprint 3","Scalable","Our MVP","Stretch goal","Tech stack slide",
-  "We pivoted","Ran into some roadblocks","Low hanging fruit","Leveraging AI",
-  "Machine learning (there is no ML)","User friendly","Seamless","Robust","Microservices",
-  "Cloud based","It worked on my machine","Live demo breaks","We're on track",
-  "Moving forward","Circle back","Use case","End to end","Real time","Pain points",
-  "Stakeholders","\"The client wants...\"","Gantt chart","Jira or Trello screenshot",
-  "\"This is just a placeholder\"","ER diagram slide","Firebase","React Native",
-  "\"Next steps\"","\"Any questions?\" ... silence","Reads the slide word for word",
-  "\"I'll pass it to...\"","Still working out the kinks","Proof of concept",
-  "Says \"API\" 5+ times","Dockerized","Deliverables","Bandwidth","Synergy","Iterate",
-  "Under the hood","Basically a GPT wrapper","Technical debt","Mobile first",
-  "Blockchain","\"Hopefully by the final\"","Professor asks about testing",
-  "\"We haven't started testing\"","Laptop won't connect to projector","\"Next slide, please\"",
-  "Teammate who never speaks","CI/CD pipeline","Merge conflicts","Scope creep",
-  "Requirements changed","Edge cases","Learning curve","IoT","Raspberry Pi",
-  "Figma prototype","Dark mode","Authentication was hard","\"Can you hear me?\"",
-  "Runs over time","UML diagram","Lessons learned","\"Long story short\""
+  "Agile","We're in Sprint 3","Scalable","Our MVP","Stretch goal","Tech stack slide","We pivoted",
+  "Ran into some roadblocks","Low hanging fruit","Leveraging AI","Machine learning (there is no ML)",
+  "User friendly","Seamless","Robust","Microservices","Cloud based","It worked on my machine",
+  "Live demo breaks","We're on track","Moving forward","Circle back","Use case","End to end","Real time",
+  "Pain points","Stakeholders","\"The client wants...\"","Gantt chart","Jira or Trello screenshot",
+  "\"This is just a placeholder\"","ER diagram slide","Firebase","React Native","\"Next steps\"",
+  "\"Any questions?\" ... silence","Reads the slide word for word","\"I'll pass it to...\"",
+  "Still working out the kinks","Proof of concept","Says \"API\" 5+ times","Dockerized","Deliverables",
+  "Bandwidth","Synergy","Iterate","Under the hood","Basically a GPT wrapper","Technical debt","Mobile first",
+  "Blockchain","\"Hopefully by the final\"","Professor asks about testing","\"We haven't started testing\"",
+  "Laptop won't connect to projector","\"Next slide, please\"","Teammate who never speaks","CI/CD pipeline",
+  "Merge conflicts","Scope creep","Requirements changed","Edge cases","Learning curve","IoT","Raspberry Pi",
+  "Figma prototype","Dark mode","Authentication was hard","\"Can you hear me?\"","Runs over time",
+  "UML diagram","Lessons learned","\"Long story short\"","Paradigm shift","Move the needle","Value add",
+  "Best practices","Industry standard","Cutting edge","State of the art","Game changer","Disruptive",
+  "Intuitive UI","Clean UI","Data driven","Empower users","Single source of truth","Deep dive",
+  "\"At a high level\"","Big picture","Out of scope","\"That's for phase 2\"","Future work","Nice to have",
+  "Backlog","User stories","Burndown chart","Daily standups","Scrum master","Retrospective",
+  "Waterfall (said with shame)","Full stack","REST API","AWS","Azure credits","Kubernetes","Serverless",
+  "WebSockets","Arduino","Computer vision","Neural network","LLM","Chatbot","Prompt engineering","RAG",
+  "\"We fine tuned the model\"","Training data","\"Accuracy is around 90%\"","Dataset from Kaggle",
+  "Web scraping","Push notifications","Login page demo","Responsive design","Accessibility","Cross platform",
+  "Offline mode","Bottleneck","Database migration","Refactor","Code review","Pull requests",
+  "GitHub commit graph","Branching strategy","Test coverage","Integration testing","Usability testing",
+  "Beta testers","Survey results","Hardcoded for the demo","Mock data","localhost in the URL bar",
+  "Error in the console","Unreadable code screenshot","Wall of text slide","Stock photo handshake",
+  "Architecture diagram with 20 arrows","Recorded demo instead of live","Demo video has no sound",
+  "\"Bear with me\"","\"Let me just refresh\"","\"It was working this morning\"",
+  "\"That's a great question\"","\"We're looking into that\"","Passes the question to a teammate",
+  "\"As you can see...\" (we can't)","\"Quick overview\" (it isn't)","\"I'll keep this brief\"",
+  "\"Without further ado\"","\"Basically...\"","\"It's like Uber for...\"","\"So yeah\"",
+  "Laser pointer misses the screen","Talks to the slides, not the room","Reading notes off a phone",
+  "Clicker doesn't work","Wrong version of the slides","Typo on a slide","\"Sorry, it's a little small\"",
+  "Team intro slide with headshots","Roles and responsibilities slide","\"Our sponsor\"","Risk matrix",
+  "\"We're a bit behind\"","\"Ahead of schedule\"","Someone's phone goes off","Professor checks the time",
+  "Professor says \"interesting\"","QR code on a slide","Competitor comparison table",
+  "\"No one else is doing this\"","Target audience: everyone","Monetization plan","Gamification",
+  "Leaderboard","Social impact","Use case diagram","Sequence diagram","Wireframes","Free tier limits",
+  "API rate limit","API key visible on screen","NDA with the sponsor","Discord as project management",
+  "\"Unforeseen circumstances\"","Someone dropped the class","Deprecated library","Stack Overflow",
+  "Real world application","Load testing","Security concerns","Privacy and user data"
 ];
 const FREE = "Can everyone see my screen?";
 const KEY = "midpoint-bingo-v1";
