@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Midpoint Bingo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Barlow+Semi+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/*
+VOICE: playful, a little deadpan, for surviving a long class session
+IDEA: a bingo hall paper card you dab with a magenta dauber
+PICTURE: the card itself, big, at the top; dabs are translucent ink circles
+COLOUR and TYPE: cobalt ground, white card, magenta dauber, yellow win; Bungee letters + Barlow Semi Condensed
+LAYOUT: modest title, card centered, controls and status in one row beneath
+*/
+:root{color-scheme:light dark;
+--bg:light-dark(#1f3bd1,#0b1240);
+--card:light-dark(#ffffff,#161c3d);
+--ink:light-dark(#151a33,#eef0ff);
+--sub:light-dark(#dfe5ff,#aeb7ec);
+--line:light-dark(#c9cfe8,#2c3566);
+--dab:#e6007e;--win:#ffd400}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Barlow Semi Condensed",system-ui,sans-serif;overflow-x:clip;min-height:100vh}
+.band{padding:clamp(20px,4vw,48px) max(4vw,10px);max-width:760px;margin:0 auto}
+header{color:#fff;margin-bottom:18px}
+h1{font:400 clamp(32px,7vw,48px)/1.05 Bungee,sans-serif;margin:0 0 6px;text-wrap:balance}
+header p{margin:0;color:var(--sub);font-size:17px}
+.card{background:var(--card);border-radius:18px;padding:clamp(8px,2vw,16px);box-shadow:0 18px 40px rgba(0,0,0,.35),0 2px 0 rgba(255,255,255,.15) inset}
+.head,.grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(4px,1vw,8px)}
+.head{margin-bottom:clamp(4px,1vw,8px)}
+.head span{background:var(--dab);color:#fff;font:400 clamp(22px,6vw,38px)/1 Bungee,sans-serif;text-align:center;padding:10px 0 8px;border-radius:10px}
+.sq{position:relative;min-height:clamp(78px,17vw,118px);border:2px solid var(--line);border-radius:10px;background:transparent;color:var(--ink);font:600 clamp(13px,2.4vw,16px)/1.15 "Barlow Semi Condensed",sans-serif;padding:6px 4px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-align:center;overflow-wrap:anywhere;hyphens:auto;-webkit-tap-highlight-color:transparent;transition:border-color .15s}
+.sq:hover{border-color:var(--dab)}
+.sq:focus-visible{outline:3px solid var(--win);outline-offset:2px}
+.sq span{position:relative;z-index:1}
+.sq::after{content:"";position:absolute;left:50%;top:50%;width:84%;aspect-ratio:1;max-height:92%;border-radius:50%;background:radial-gradient(circle at 40% 35%,rgba(255,90,180,.55),rgba(230,0,126,.5) 60%,rgba(180,0,100,.55));transform:translate(-50%,-50%) scale(0);transition:transform .18s cubic-bezier(.3,1.6,.5,1)}
+.sq.on::after{transform:translate(-50%,-50%) scale(1)}
+.sq.free{font-family:Bungee,sans-serif;font-weight:400;font-size:clamp(12px,2.2vw,15px);cursor:default}
+.sq.win{border-color:var(--win);box-shadow:0 0 0 2px var(--win)}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:16px}
+button.b{font:700 16px "Barlow Semi Condensed",sans-serif;min-height:44px;padding:0 18px;border-radius:999px;border:2px solid #fff;background:transparent;color:#fff;cursor:pointer}
+button.b.primary{background:#fff;color:#1f3bd1;border-color:#fff}
+button.b:focus-visible{outline:3px solid var(--win);outline-offset:2px}
+.status{margin-left:auto;color:var(--sub);font-size:16px;white-space:nowrap}
+.status b{color:#fff}
+.banner{display:none;margin-top:14px;background:var(--win);color:#1a1400;border-radius:14px;padding:12px 16px;font-size:17px}
+.banner.show{display:block}
+.banner strong{font:400 22px Bungee,sans-serif;margin-right:8px}
+.note{color:var(--sub);font-size:14px;margin-top:18px}
+@media(max-width:600px){.status{margin-left:0;width:100%}}
+@media(prefers-reduced-motion:reduce){.sq::after{transition:none}}
+</style>
+</head>
+<body>
+<main class="band">
+  <header>
+    <h1>Midpoint Bingo</h1>
+    <p>Senior project midpoint presentations. Three hours. Tap a square when you hear it.</p>
+  </header>
+
+  <section class="card" aria-label="Bingo card">
+    <div class="head" aria-hidden="true"><span>A</span><span>G</span><span>I</span><span>L</span><span>E</span></div>
+    <div class="grid" id="grid" role="grid"></div>
+  </section>
+
+  <div class="banner" id="banner" role="status"><strong>Bingo!</strong><span id="bannerText">Please do not yell it.</span></div>
+
+  <div class="bar">
+    <button class="b primary" id="newCard" type="button">New card</button>
+    <button class="b" id="clear" type="button">Clear marks</button>
+    <span class="status" id="status"></span>
+  </div>
+
+  <p class="note">Each card number deals a different shuffle from about 70 phrases, so the person next to you can tap New card and play their own. Rows, columns and diagonals count.</p>
+</main>
+
+<script>
+{
+const BANK = [
+  "Agile","We're in Sprint 3","Scalable","Our MVP","Stretch goal","Tech stack slide",
+  "We pivoted","Ran into some roadblocks","Low hanging fruit","Leveraging AI",
+  "Machine learning (there is no ML)","User friendly","Seamless","Robust","Microservices",
+  "Cloud based","It worked on my machine","Live demo breaks","We're on track",
+  "Moving forward","Circle back","Use case","End to end","Real time","Pain points",
+  "Stakeholders","\"The client wants...\"","Gantt chart","Jira or Trello screenshot",
+  "\"This is just a placeholder\"","ER diagram slide","Firebase","React Native",
+  "\"Next steps\"","\"Any questions?\" ... silence","Reads the slide word for word",
+  "\"I'll pass it to...\"","Still working out the kinks","Proof of concept",
+  "Says \"API\" 5+ times","Dockerized","Deliverables","Bandwidth","Synergy","Iterate",
+  "Under the hood","Basically a GPT wrapper","Technical debt","Mobile first",
+  "Blockchain","\"Hopefully by the final\"","Professor asks about testing",
+  "\"We haven't started testing\"","Laptop won't connect to projector","\"Next slide, please\"",
+  "Teammate who never speaks","CI/CD pipeline","Merge conflicts","Scope creep",
+  "Requirements changed","Edge cases","Learning curve","IoT","Raspberry Pi",
+  "Figma prototype","Dark mode","Authentication was hard","\"Can you hear me?\"",
+  "Runs over time","UML diagram","Lessons learned","\"Long story short\""
+];
+const FREE = "Can everyone see my screen?";
+const KEY = "midpoint-bingo-v1";
+const LINES = [];
+for (let i = 0; i < 5; i++) {
+  LINES.push([0,1,2,3,4].map(c => i*5 + c));
+  LINES.push([0,1,2,3,4].map(r => r*5 + i));
+}
+LINES.push([0,6,12,18,24], [4,8,12,16,20]);
+
+const grid = document.getElementById("grid");
+const statusEl = document.getElementById("status");
+const banner = document.getElementById("banner");
+const bannerText = document.getElementById("bannerText");
+
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function deal(n){
+  const r = rng(n), a = BANK.slice();
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  const picks = a.slice(0, 24);
+  picks.splice(12, 0, FREE);
+  return picks;
+}
+function esc(s){return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+
+let state = { card: 0, marks: [] };
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} }
+function load(){ try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.card) return s; } catch(e){} return null; }
+function newNumber(){ return 1000 + Math.floor(Math.random() * 9000); }
+
+function render(){
+  const words = deal(state.card);
+  const on = new Set(state.marks); on.add(12);
+  const wins = LINES.filter(l => l.every(i => on.has(i)));
+  const winCells = new Set(wins.flat());
+  grid.innerHTML = words.map((w, i) => {
+    const free = i === 12;
+    const cls = ["sq", on.has(i) ? "on" : "", free ? "free" : "", winCells.has(i) ? "win" : ""].join(" ");
+    return `<button type="button" class="${cls}" data-i="${i}" role="gridcell" aria-pressed="${on.has(i)}"${free ? ' aria-disabled="true"' : ""}><span>${free ? "Free: " : ""}${esc(w)}</span></button>`;
+  }).join("");
+  const count = on.size - 1;
+  statusEl.innerHTML = `Card <b>#${state.card}</b> · <b>${count}</b> marked · <b>${wins.length}</b> bingo${wins.length === 1 ? "" : "s"}`;
+  banner.classList.toggle("show", wins.length > 0);
+  bannerText.textContent = wins.length > 1 ? `That's ${wins.length} lines. Still, please do not yell it.` : "Please do not yell it.";
+  if (location.hash !== "#card-" + state.card) history.replaceState(null, "", "#card-" + state.card);
+}
+
+grid.addEventListener("click", e => {
+  const b = e.target.closest(".sq"); if (!b) return;
+  const i = +b.dataset.i; if (i === 12) return;
+  const m = new Set(state.marks);
+  m.has(i) ? m.delete(i) : m.add(i);
+  state.marks = [...m]; save(); render();
+  const nb = grid.querySelector(`[data-i="${i}"]`); if (nb) nb.focus();
+});
+document.getElementById("newCard").addEventListener("click", () => {
+  state = { card: newNumber(), marks: [] }; save(); render();
+});
+document.getElementById("clear").addEventListener("click", () => {
+  state.marks = []; save(); render();
+});
+function fromHash(){
+  const m = /^#card-(\d{1,6})$/.exec(location.hash);
+  return m ? +m[1] : 0;
+}
+window.addEventListener("hashchange", () => {
+  const n = fromHash();
+  if (n && n !== state.card) { state = { card: n, marks: [] }; save(); render(); }
+});
+
+const hashed = fromHash(), saved = load();
+if (hashed && (!saved || saved.card !== hashed)) state = { card: hashed, marks: [] };
+else if (saved) state = saved;
+else state = { card: newNumber(), marks: [] };
+save(); render();
+}
+</script>
+</body>
+</html>
